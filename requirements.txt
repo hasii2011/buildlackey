@@ -1,0 +1,13 @@
+wheel==0.40.0
+setuptools==67.6.1
+twine==4.0.2
+build==0.10.0
+
+html-testRunner~=1.2.1
+mypy==1.2.0
+mypy-extensions==1.0.0
+types-Deprecated==1.2.9.2
+types-setuptools==67.6.0.7
+typing_extensions==4.5.0
+
+click==8.1.3
