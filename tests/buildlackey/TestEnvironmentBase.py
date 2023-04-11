@@ -6,10 +6,7 @@ from os import environ as osEnviron
 
 from hasiihelper.UnitTestBase import UnitTestBase
 
-from buildlackey.Environment import Environment
 from buildlackey.EnvironmentBase import EnvironmentBase
-from buildlackey.exceptions.ProjectNotSetException import ProjectNotSetException
-from buildlackey.exceptions.ProjectsBaseNotSetException import ProjectsBaseNotSetException
 
 
 class TestEnvironmentBase(UnitTestBase):
@@ -29,7 +26,7 @@ class TestEnvironmentBase(UnitTestBase):
 
     def testNoProjectsBaseSet(self):
         try:
-            del osEnviron[Environment.ENV_PROJECTS_BASE]
+            del osEnviron[EnvironmentBase.ENV_PROJECTS_BASE]
         except KeyError:
             pass    # May or may not exist;  don't care
 
@@ -37,9 +34,9 @@ class TestEnvironmentBase(UnitTestBase):
         self.assertFalse(eb.validProjectsBase, 'Should not be set')
 
     def testNoProjectSet(self):
-        osEnviron[Environment.ENV_PROJECTS_BASE] = str(self._tmpProjectsBase)   # Set the base
+        osEnviron[EnvironmentBase.ENV_PROJECTS_BASE] = str(self._tmpProjectsBase)   # Set the base
         try:
-            del osEnviron[Environment.ENV_PROJECT]
+            del osEnviron[EnvironmentBase.ENV_PROJECT]
         except KeyError:
             pass    # May or may not exist;  don't care
 

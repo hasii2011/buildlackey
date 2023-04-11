@@ -4,13 +4,14 @@ from logging import getLogger
 
 from os import environ as osEnvironment
 
-from buildlackey.Environment import Environment
-
 
 class EnvironmentBase:
     """
 
     """
+    ENV_PROJECTS_BASE: str = 'PROJECTS_BASE'
+    ENV_PROJECT:       str = 'PROJECT'
+
     def __init__(self):
 
         self.ebLogger: Logger = getLogger(__name__)
@@ -19,11 +20,11 @@ class EnvironmentBase:
         self._projectDirectory: str = ''
 
         try:
-            self._projectsBase = osEnvironment[Environment.ENV_PROJECTS_BASE]
+            self._projectsBase = osEnvironment[EnvironmentBase.ENV_PROJECTS_BASE]
         except KeyError:
             self.ebLogger.error(f'Project Base not set')
         try:
-            self._projectDirectory = osEnvironment[Environment.ENV_PROJECT]
+            self._projectDirectory = osEnvironment[EnvironmentBase.ENV_PROJECT]
         except KeyError:
             self.ebLogger.error(f'Project Directory not set')
 
