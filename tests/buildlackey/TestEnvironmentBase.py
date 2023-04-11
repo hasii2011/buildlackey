@@ -6,7 +6,7 @@ from os import environ as osEnviron
 
 from hasiihelper.UnitTestBase import UnitTestBase
 
-from buildlackey.EnvironmentBase import EnvironmentBase
+from buildlackey.Environment import EnvironmentBase
 
 
 class TestEnvironmentBase(UnitTestBase):

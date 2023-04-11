@@ -10,7 +10,7 @@ from click import command
 from click import secho
 from click import version_option
 
-from buildlackey.EnvironmentBase import EnvironmentBase
+from buildlackey.Environment import EnvironmentBase
 from buildlackey.Version import Version
 
 
