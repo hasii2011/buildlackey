@@ -1,8 +1,8 @@
 
-from os import system as osSystem
 from os import chdir
 
 from os import sep as osSep
+from os import system as osSystem
 
 from click import argument
 from click import clear
@@ -10,8 +10,9 @@ from click import command
 from click import secho
 from click import version_option
 
-
+from buildlackey.EnvironmentBase import EnvironmentBase
 from buildlackey.Version import Version
+
 
 # noinspection SpellCheckingInspection
 UNIT_TEST_CLI: str = 'python3 -Wdefault -m tests.TestAll'
@@ -41,17 +42,21 @@ def doCommandStart(projects_base: str, project: str):
 
 @command()
 @version_option(version=f'{Version().version}', message='%(prog)s version %(version)s')
-@argument('projects_base', envvar=PROJECTS_BASE)
-@argument('project',       envvar=PROJECT)
-def runtests(projects_base: str, project: str):
+def runtests():
     """
     \b
-    Runs the unit tests for the project specified by the following environment variables
+    Runs the unit tests for the project specified by the following environment variables;
+
     \b
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
+    \b
+    However, if one or the other is not defined the command assumes it is executing in a CI
+    environment and thus the current working directory is the project base directory.
     """
-    doCommandStart(projects_base, project)
+    envBase: EnvironmentBase = EnvironmentBase()
+    if envBase.validProjectsBase is True and envBase.validProjectDirectory() is True:
+        changeToProjectRoot(projectsBase=envBase.projectsBase, project=envBase.projectDirectory)
 
     secho(f'{UNIT_TEST_CLI}')
     status: int = osSystem(f'{UNIT_TEST_CLI}')

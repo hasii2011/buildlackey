@@ -6,9 +6,6 @@ from os import environ as osEnvironment
 
 from buildlackey.Environment import Environment
 
-from buildlackey.exceptions.ProjectNotSetException import ProjectNotSetException
-from buildlackey.exceptions.ProjectsBaseNotSetException import ProjectsBaseNotSetException
-
 
 class EnvironmentBase:
     """
@@ -25,11 +22,28 @@ class EnvironmentBase:
             self._projectsBase = osEnvironment[Environment.ENV_PROJECTS_BASE]
         except KeyError:
             self.ebLogger.error(f'Project Base not set')
-            raise ProjectsBaseNotSetException
         try:
             self._projectDirectory = osEnvironment[Environment.ENV_PROJECT]
         except KeyError:
             self.ebLogger.error(f'Project Directory not set')
-            raise ProjectNotSetException
-        except (ValueError, Exception) as e:
-            self.ebLogger.error(f'{e}')
+
+    @property
+    def projectsBase(self) -> str:
+        return self._projectsBase
+
+    @property
+    def projectDirectory(self) -> str:
+        return self._projectDirectory
+
+    @property
+    def validProjectsBase(self) -> bool:
+        if self._projectsBase == '':
+            return False
+        else:
+            return True
+
+    def validProjectDirectory(self) -> bool:
+        if self._projectDirectory == '':
+            return False
+        else:
+            return True

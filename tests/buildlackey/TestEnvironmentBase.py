@@ -28,22 +28,16 @@ class TestEnvironmentBase(UnitTestBase):
         super().tearDown()
 
     def testNoProjectsBaseSet(self):
-        self.assertRaises(ProjectsBaseNotSetException, lambda: self._failsOnProjectsBaseNotSet())
-
-    def testNoProjectSet(self):
-        self.assertRaises(ProjectNotSetException, lambda: self._failsOnProjectNotSet())
-
-    def _failsOnProjectsBaseNotSet(self):
         try:
             del osEnviron[Environment.ENV_PROJECTS_BASE]
         except KeyError:
             pass    # May or may not exist;  don't care
 
-        # noinspection PyUnusedLocal
         eb: EnvironmentBase = EnvironmentBase()
+        self.assertFalse(eb.validProjectsBase, 'Should not be set')
 
-    def _failsOnProjectNotSet(self):
-        osEnviron[Environment.ENV_PROJECTS_BASE] = str(self._tmpProjectsBase)
+    def testNoProjectSet(self):
+        osEnviron[Environment.ENV_PROJECTS_BASE] = str(self._tmpProjectsBase)   # Set the base
         try:
             del osEnviron[Environment.ENV_PROJECT]
         except KeyError:
@@ -51,6 +45,7 @@ class TestEnvironmentBase(UnitTestBase):
 
         # noinspection PyUnusedLocal
         eb: EnvironmentBase = EnvironmentBase()
+        self.assertFalse(eb.validProjectDirectory(), 'Project directory should not be set')
 
 
 def suite() -> TestSuite:
