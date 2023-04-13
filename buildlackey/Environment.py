@@ -22,11 +22,11 @@ class EnvironmentBase:
         try:
             self._projectsBase = osEnvironment[EnvironmentBase.ENV_PROJECTS_BASE]
         except KeyError:
-            self.ebLogger.error(f'Project Base not set')
+            self.ebLogger.info(f'Project Base not set')
         try:
             self._projectDirectory = osEnvironment[EnvironmentBase.ENV_PROJECT]
         except KeyError:
-            self.ebLogger.error(f'Project Directory not set')
+            self.ebLogger.info(f'Project Directory not set')
 
     @property
     def projectsBase(self) -> str:
