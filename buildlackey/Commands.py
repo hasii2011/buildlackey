@@ -26,6 +26,7 @@ from buildlackey.Version import Version
 
 # noinspection SpellCheckingInspection
 UNIT_TEST_CLI: str = 'python3 -Wdefault -m tests.TestAll'
+BUILD_WHEEL:   str = 'python -m build --sdist --wheel'
 
 DELETE_DIST_BUILD:       str = 'rm -rfv dist build'
 DELETE_GENERAL_EGG_INFO: str = "find . -type d -name '*'.egg-info -delete"
@@ -38,8 +39,11 @@ PROJECT:       str = 'PROJECT'
 RESOURCES_PACKAGE_NAME:       str = 'buildlackey.resources'
 JSON_LOGGING_CONFIG_FILENAME: str = "loggingConfiguration.json"
 
-STATUS_NO_SUCH_PATH:     int = 23
-STATUS_UNIT_TEST_FAILED: int = 77
+STATUS_NO_SUCH_PATH:                 int = 23
+STATUS_UNIT_TEST_FAILED:             int = 77
+STATUS_MISSING_ENVIRONMENT_VARIABLE: int = 42
+
+MESSAGE_MISSING_ENVIRONMENT_VARIABLE: str = 'Missing an environment variable'
 
 
 def changeToProjectRoot(projectsBase: str, project: str):
@@ -78,11 +82,15 @@ def setUpLogging():
 def runtests(input_file: str):
     """
     \b
-    Runs the unit tests for the project specified by the following environment variables;
+    Runs the unit tests for the project specified by the environment variables listed below;
+    \b
+    Use the -i/--input-file option to list a set of module names to execute as your
+    unit tests
     \b
 
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
+    
     \b
     \b
     However, if one or the other is not defined the command assumes it is executing in a CI
@@ -96,6 +104,9 @@ def runtests(input_file: str):
     envBase: EnvironmentBase = EnvironmentBase()
     if envBase.validProjectsBase is True and envBase.validProjectDirectory() is True:
         changeToProjectRoot(projectsBase=envBase.projectsBase, project=envBase.projectDirectory)
+    else:
+        secho(f'{MESSAGE_MISSING_ENVIRONMENT_VARIABLE}')
+        exit(STATUS_MISSING_ENVIRONMENT_VARIABLE)
 
     if input_file is None:
         secho(f'{UNIT_TEST_CLI}')
@@ -180,27 +191,54 @@ def runmypy(projects_base: str, project: str):
 
 @command()
 @version_option(version=f'{Version().version}', message='%(prog)s version %(version)s')
-@argument('projects_base', envvar=PROJECTS_BASE)
-@argument('project',       envvar=PROJECT)
-def deploy(projects_base: str, project: str):
+@option('--input-file', '-i', required=False,   help='Use input file to specify a set of commands to execute')
+def deploy(input_file: str):
     """
     \b
-    Creates the deployable for the project specified by the following environment variables
+    Creates the deployable for the project specified by the environment variables listed below
+    \b
+    Use the -i/--input-file option to specify a set of custom commands to execute to build
+    your deployable
+
+
     \b
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
+
     """
-    doCommandStart(projects_base, project)
+    setUpLogging()
+    envBase: EnvironmentBase = EnvironmentBase()
+    if envBase.validProjectsBase is True and envBase.validProjectDirectory() is True:
+        changeToProjectRoot(projectsBase=envBase.projectsBase, project=envBase.projectDirectory)
+    else:
+        secho(f'{MESSAGE_MISSING_ENVIRONMENT_VARIABLE}')
+        exit(STATUS_MISSING_ENVIRONMENT_VARIABLE)
 
-    BUILD_WHEEL:   str = 'python -m build --sdist --wheel'
-    secho(f'{BUILD_WHEEL}')
-    status: int = osSystem(BUILD_WHEEL)
-    secho(f'{status=}')
+    doCommandStart(envBase.projectsBase, envBase.projectDirectory)
 
-    CHECK_PACKAGE: str = 'twine check dist/*'
-    secho(f'{CHECK_PACKAGE}')
-    status = osSystem(CHECK_PACKAGE)
-    secho(f'{status=}')
+    if input_file is None:
+        secho(f'{BUILD_WHEEL}')
+        status: int = osSystem(BUILD_WHEEL)
+        secho(f'{status=}')
+
+        CHECK_PACKAGE: str = 'twine check dist/*'
+        secho(f'{CHECK_PACKAGE}')
+        status = osSystem(CHECK_PACKAGE)
+        secho(f'{status=}')
+    else:
+        path: Path = Path(input_file)
+        if path.exists() is True:
+            with path.open(mode='r') as fd:
+                cmd: str = fd.readline()
+                while cmd != '':
+                    secho(f'{cmd}')
+                    status = osSystem(f'{cmd}')
+                    if status != 0:
+                        exit(status)
+                    cmd = fd.readline()
+        else:
+            secho(f'No such file: {input_file}')
+            exit(STATUS_NO_SUCH_PATH)
 
 
 @command()
@@ -226,4 +264,4 @@ def prodpush(projects_base: str, project: str):
 
 if __name__ == "__main__":
 
-    runtests()
+    deploy()
