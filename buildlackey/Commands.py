@@ -90,7 +90,7 @@ def runtests(input_file: str):
 
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
-    
+
     \b
     \b
     However, if one or the other is not defined the command assumes it is executing in a CI
@@ -104,9 +104,6 @@ def runtests(input_file: str):
     envBase: EnvironmentBase = EnvironmentBase()
     if envBase.validProjectsBase is True and envBase.validProjectDirectory() is True:
         changeToProjectRoot(projectsBase=envBase.projectsBase, project=envBase.projectDirectory)
-    else:
-        secho(f'{MESSAGE_MISSING_ENVIRONMENT_VARIABLE}')
-        exit(STATUS_MISSING_ENVIRONMENT_VARIABLE)
 
     if input_file is None:
         secho(f'{UNIT_TEST_CLI}')
