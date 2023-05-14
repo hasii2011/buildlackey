@@ -47,21 +47,21 @@ source pyenv-3.10.6/bin/activate
 
 ## Python Console Scripts
 
-VersionOverlord means to handle this problem by providing a set of Python command line scripts to automate updating the first three of the above dependency specification locations
+buildlackey means to handle this problem by providing a set of Python command line scripts to automate updating the first three of the above dependency specification locations
 
 * runtests -- queries repositories for their latest release version
 * runmypy -- creates a dependency specification for a project 
 * cleanup -- updates the supported dependency locations using the generated specification
 * deploy -- 
-* Prod push --
+* prodpush --
 
 ## Usage
 
-runtests
-runmypy
-cleanup
-deploy
-pushtoprod
+* runtests
+* runmypy
+* cleanup
+* deploy
+* prodpush
 
 ___
 
