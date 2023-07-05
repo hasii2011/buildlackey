@@ -20,8 +20,9 @@ from click import command
 from click import secho
 from click import version_option
 
+from buildlackey import __version__ as version
+
 from buildlackey.Environment import EnvironmentBase
-from buildlackey.Version import Version
 
 
 # noinspection SpellCheckingInspection
@@ -77,7 +78,7 @@ def setUpLogging():
 
 
 @command()
-@version_option(version=f'{Version().version}', message='%(prog)s version %(version)s')
+@version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @option('--input-file', '-i', required=False,   help='Use input file to list the unit tests to execute')
 def runtests(input_file: str):
     """
@@ -128,7 +129,7 @@ def runtests(input_file: str):
 
 
 @command()
-@version_option(version=f'{Version().version}', message='%(prog)s version %(version)s')
+@version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @argument('projects_base', envvar=PROJECTS_BASE)
 @argument('project',       envvar=PROJECT)
 def cleanup(projects_base: str, project: str):
@@ -164,7 +165,7 @@ def cleanup(projects_base: str, project: str):
 
 
 @command()
-@version_option(version=f'{Version().version}', message='%(prog)s version %(version)s')
+@version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @argument('projects_base', envvar=PROJECTS_BASE)
 @argument('project',       envvar=PROJECT)
 def runmypy(projects_base: str, project: str):
@@ -187,7 +188,7 @@ def runmypy(projects_base: str, project: str):
 
 
 @command()
-@version_option(version=f'{Version().version}', message='%(prog)s version %(version)s')
+@version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @option('--input-file', '-i', required=False,   help='Use input file to specify a set of commands to execute')
 def deploy(input_file: str):
     """
@@ -239,7 +240,7 @@ def deploy(input_file: str):
 
 
 @command()
-@version_option(version=f'{Version().version}', message='%(prog)s version %(version)s')
+@version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @argument('projects_base', envvar=PROJECTS_BASE)
 @argument('project', envvar=PROJECT)
 def prodpush(projects_base: str, project: str):
