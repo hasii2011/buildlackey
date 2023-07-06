@@ -10,6 +10,8 @@ from json import load as jsonLoad
 from os import chdir
 
 from os import sep as osSep
+from os import linesep as osLineSep
+
 from os import system as osSystem
 from pathlib import Path
 
@@ -115,13 +117,15 @@ def runtests(input_file: str):
         if path.exists() is True:
             with path.open(mode='r') as fd:
                 moduleName: str = fd.readline()
+
                 while moduleName != '':
-                    # noinspection SpellCheckingInspection
-                    cmd: str = f'python3 -Wdefault -m {moduleName}'
-                    secho(f'{cmd}')
-                    status = osSystem(f'{cmd}')
-                    if status != 0:
-                        exit(status)
+                    if moduleName != osLineSep and not moduleName.startswith('#'):
+                        # noinspection SpellCheckingInspection
+                        cmd: str = f'python3 -Wdefault -m {moduleName}'
+                        secho(f'{cmd}')
+                        status = osSystem(f'{cmd}')
+                        if status != 0:
+                            exit(status)
                     moduleName = fd.readline()
         else:
             secho(f'No such file: {input_file}')
@@ -262,4 +266,4 @@ def prodpush(projects_base: str, project: str):
 
 if __name__ == "__main__":
 
-    deploy()
+    runtests(['-i', '../pyut/tests/unittest.tst'])
