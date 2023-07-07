@@ -23,6 +23,7 @@ setup(
     url="https://github.com/buildlackey",
     packages=[
         'buildlackey',
+        'buildlackey.commands',
         'buildlackey.exceptions',
         'buildlackey.resources',
     ],

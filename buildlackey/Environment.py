@@ -2,10 +2,15 @@
 from logging import Logger
 from logging import getLogger
 
+from os import chdir
+
 from os import environ as osEnvironment
+from os import sep as osSep
+
+from click import ClickException
 
 
-class EnvironmentBase:
+class Environment:
     """
 
     """
@@ -20,13 +25,13 @@ class EnvironmentBase:
         self._projectDirectory: str = ''
 
         try:
-            self._projectsBase = osEnvironment[EnvironmentBase.ENV_PROJECTS_BASE]
+            self._projectsBase = osEnvironment[Environment.ENV_PROJECTS_BASE]
         except KeyError:
-            self.ebLogger.info(f'Project Base not set')
+            raise ClickException('Project Base not set')
         try:
-            self._projectDirectory = osEnvironment[EnvironmentBase.ENV_PROJECT]
+            self._projectDirectory = osEnvironment[Environment.ENV_PROJECT]
         except KeyError:
-            self.ebLogger.info(f'Project Directory not set')
+            raise ClickException(f'Project Directory not set')
 
     @property
     def projectsBase(self) -> str:
@@ -48,3 +53,8 @@ class EnvironmentBase:
             return False
         else:
             return True
+
+    def _changeToProjectRoot(self):
+
+        fullPath: str = f'{self._projectsBase}{osSep}{self._projectDirectory}'
+        chdir(fullPath)

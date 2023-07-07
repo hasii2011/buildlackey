@@ -27,4 +27,3 @@ function checkStatus {
     fi
 }
 
-echo "I have been sourced"
