@@ -12,8 +12,6 @@ from os import chdir
 from os import sep as osSep
 from os import system as osSystem
 
-from pathlib import Path
-
 from click import argument
 from click import option
 from click import clear
@@ -23,8 +21,8 @@ from click import version_option
 
 from buildlackey import __version__ as version
 
-from buildlackey.Environment import Environment
 from buildlackey.commands.Cleanup import Cleanup
+from buildlackey.commands.Package import Package
 from buildlackey.commands.RunMypy import RunMypy
 from buildlackey.commands.RunTests import RunTests
 
@@ -146,7 +144,7 @@ def runmypy():
 @command()
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @option('--input-file', '-i', required=False,   help='Use input file to specify a set of commands to execute')
-def deploy(input_file: str):
+def package(input_file: str):
     """
     \b
     Creates the deployable for the project specified by the environment variables listed below
@@ -161,38 +159,9 @@ def deploy(input_file: str):
 
     """
     setUpLogging()
-    envBase: Environment = Environment()
-    if envBase.validProjectsBase is True and envBase.validProjectDirectory() is True:
-        changeToProjectRoot(projectsBase=envBase.projectsBase, project=envBase.projectDirectory)
-    else:
-        secho(f'{MESSAGE_MISSING_ENVIRONMENT_VARIABLE}')
-        exit(STATUS_MISSING_ENVIRONMENT_VARIABLE)
+    pkg: Package = Package(inputFile=input_file)
 
-    doCommandStart(envBase.projectsBase, envBase.projectDirectory)
-
-    if input_file is None:
-        secho(f'{BUILD_WHEEL}')
-        status: int = osSystem(BUILD_WHEEL)
-        secho(f'{status=}')
-
-        CHECK_PACKAGE: str = 'twine check dist/*'
-        secho(f'{CHECK_PACKAGE}')
-        status = osSystem(CHECK_PACKAGE)
-        secho(f'{status=}')
-    else:
-        path: Path = Path(input_file)
-        if path.exists() is True:
-            with path.open(mode='r') as fd:
-                cmd: str = fd.readline()
-                while cmd != '':
-                    secho(f'{cmd}')
-                    status = osSystem(f'{cmd}')
-                    if status != 0:
-                        exit(status)
-                    cmd = fd.readline()
-        else:
-            secho(f'No such file: {input_file}')
-            exit(STATUS_NO_SUCH_PATH)
+    pkg.execute()
 
 
 @command()

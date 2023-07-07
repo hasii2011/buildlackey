@@ -39,7 +39,7 @@ setup(
             "runtests=buildlackey.Commands:runtests",
             "cleanup=buildlackey.Commands:cleanup",
             "runmypy=buildlackey.Commands:runmypy",
-            "deploy=buildlackey.Commands:deploy",
+            "package=buildlackey.Commands:package",
             "prodpush=buildlackey.Commands:prodpush",
         ]
     },
