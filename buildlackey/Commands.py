@@ -25,6 +25,7 @@ from buildlackey import __version__ as version
 
 from buildlackey.Environment import Environment
 from buildlackey.commands.Cleanup import Cleanup
+from buildlackey.commands.RunMypy import RunMypy
 from buildlackey.commands.RunTests import RunTests
 
 # noinspection SpellCheckingInspection
@@ -123,8 +124,6 @@ def cleanup():
         PROJECT       -  The name of the project;  It should be a directory name
     """
     setUpLogging()
-    # doCommandStart(projects_base, project)
-
     clean: Cleanup = Cleanup()
 
     clean.execute()
@@ -132,9 +131,7 @@ def cleanup():
 
 @command()
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
-@argument('projects_base', envvar=PROJECTS_BASE)
-@argument('project',       envvar=PROJECT)
-def runmypy(projects_base: str, project: str):
+def runmypy():
     """
     \b
     Runs the mypy checks for the project specified by the following environment variables
@@ -142,15 +139,8 @@ def runmypy(projects_base: str, project: str):
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
     """
-    doCommandStart(projects_base, project)
-
-    # noinspection SpellCheckingInspection
-    # noinspection SpellCheckingInspection
-    RUN_MYPY: str = f'mypy --config-file .mypi.ini --pretty --no-color-output --show-error-codes --check-untyped-defs  {project} tests'
-    secho(f'{RUN_MYPY}')
-
-    status: int = osSystem(RUN_MYPY)
-    secho(f'{status=}')
+    runMyPy: RunMypy = RunMypy()
+    runMyPy.execute()
 
 
 @command()

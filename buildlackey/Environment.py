@@ -8,6 +8,8 @@ from os import environ as osEnvironment
 from os import sep as osSep
 
 from click import ClickException
+from click import clear
+from click import secho
 
 
 class Environment:
@@ -32,6 +34,11 @@ class Environment:
             self._projectDirectory = osEnvironment[Environment.ENV_PROJECT]
         except KeyError:
             raise ClickException(f'Project Directory not set')
+
+        clear()
+        secho(f'projects_base={self._projectsBase}', color=True, reverse=True)
+        secho(f'project={self._projectDirectory}', color=True, reverse=True)
+        secho('')
 
     @property
     def projectsBase(self) -> str:
