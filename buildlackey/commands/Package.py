@@ -3,6 +3,7 @@ from logging import Logger
 from logging import getLogger
 
 from os import system as osSystem
+
 from pathlib import Path
 
 from click import ClickException

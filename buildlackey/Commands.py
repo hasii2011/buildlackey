@@ -23,6 +23,7 @@ from buildlackey import __version__ as version
 
 from buildlackey.commands.Cleanup import Cleanup
 from buildlackey.commands.Package import Package
+from buildlackey.commands.ProductionPush import ProductionPush
 from buildlackey.commands.RunMypy import RunMypy
 from buildlackey.commands.RunTests import RunTests
 
@@ -178,11 +179,8 @@ def prodpush(projects_base: str, project: str):
     """
     doCommandStart(projects_base, project)
 
-    PYPI_PUSH: str = 'twine upload  dist/*'
-
-    secho(f'{PYPI_PUSH}')
-    status = osSystem(PYPI_PUSH)
-    secho(f'{status=}')
+    productionPush: ProductionPush = ProductionPush()
+    productionPush.execute()
 
 
 if __name__ == "__main__":
