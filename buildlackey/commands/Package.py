@@ -2,8 +2,6 @@
 from logging import Logger
 from logging import getLogger
 
-from os import system as osSystem
-
 from pathlib import Path
 
 from click import ClickException
@@ -29,12 +27,12 @@ class Package(Environment):
 
         if self._inputFile is None:
             secho(f'{BUILD_WHEEL}')
-            status: int = osSystem(BUILD_WHEEL)
+            status: int = self._runCommand(BUILD_WHEEL)
             secho(f'{status=}')
 
             CHECK_PACKAGE: str = 'twine check dist/*'
             secho(f'{CHECK_PACKAGE}')
-            status = osSystem(CHECK_PACKAGE)
+            status = self._runCommand(CHECK_PACKAGE)
             secho(f'{status=}')
         else:
             path: Path = Path(self._inputFile)
@@ -43,7 +41,7 @@ class Package(Environment):
                     cmd: str = fd.readline()
                     while cmd != '':
                         secho(f'{cmd}')
-                        status = osSystem(f'{cmd}')
+                        status = self._runCommand(f'{cmd}')
                         if status != 0:
                             exit(status)
                         cmd = fd.readline()

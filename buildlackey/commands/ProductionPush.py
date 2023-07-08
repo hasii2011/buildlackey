@@ -2,7 +2,6 @@
 from logging import Logger
 from logging import getLogger
 
-from os import system as osSystem
 
 from click import secho
 
@@ -19,5 +18,5 @@ class ProductionPush(Environment):
     def execute(self):
 
         secho(f'{PYPI_PUSH}')
-        status = osSystem(PYPI_PUSH)
+        status = self._runCommand(PYPI_PUSH)
         secho(f'{status=}')

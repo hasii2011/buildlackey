@@ -2,8 +2,6 @@
 from logging import Logger
 from logging import getLogger
 
-from os import system as osSystem
-
 from click import secho
 
 from buildlackey.Environment import Environment
@@ -22,7 +20,5 @@ class RunMypy(Environment):
         cmd: str = f'mypy --config-file .mypi.ini --pretty --no-color-output --show-error-codes --check-untyped-defs  {self._projectDirectory} tests'
         secho(f'{cmd}')
 
-        status: int = osSystem(cmd)
+        status: int = self._runCommand(command=cmd)
         secho(f'{status=}')
-
-

@@ -1,11 +1,14 @@
 
 from logging import Logger
 from logging import getLogger
+from subprocess import CompletedProcess
 
 from os import chdir
 
 from os import environ as osEnvironment
 from os import sep as osSep
+
+from subprocess import run as subProcessRun
 
 from click import ClickException
 from click import clear
@@ -60,6 +63,12 @@ class Environment:
             return False
         else:
             return True
+
+    def _runCommand(self,  command: str) -> int:
+
+        cp: CompletedProcess = subProcessRun([command], shell=True, capture_output=False, text=True, check=False)
+
+        return cp.returncode
 
     def _changeToProjectRoot(self):
 

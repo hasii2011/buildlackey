@@ -3,7 +3,6 @@ from logging import Logger
 from logging import getLogger
 
 from os import linesep as osLineSep
-from os import system as osSystem
 
 from pathlib import Path
 
@@ -42,7 +41,7 @@ class RunTests(Environment):
         if self._inputFile is None:
             defaultCmd: str = f'{PYTHON_CLI} -W{self._warning.value} -m tests.TestAll'
             secho(f'{defaultCmd}')
-            status: int = osSystem(f'python3 -W{self._warning.value} -m {DEFAULT_MODULE_NAME}')
+            status: int = self._runCommand(command=f'python3 -W{self._warning.value} -m {DEFAULT_MODULE_NAME}')
             secho(f'{status=}')
         else:
             path: Path = Path(self._inputFile)
@@ -55,7 +54,7 @@ class RunTests(Environment):
                             # noinspection SpellCheckingInspection
                             cmd: str = f'{PYTHON_CLI} -W{self._warning.value} -m {moduleName}'
                             secho(f'{cmd}')
-                            status = osSystem(f'{cmd}')
+                            status = self._runCommand(command=cmd)
                             if status != 0:
                                 exit(status)
                         moduleName = fd.readline()

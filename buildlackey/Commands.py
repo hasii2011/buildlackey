@@ -7,16 +7,8 @@ from importlib.abc import Traversable
 
 from json import load as jsonLoad
 
-from os import chdir
-
-from os import sep as osSep
-from os import system as osSystem
-
-from click import argument
-from click import option
-from click import clear
 from click import command
-from click import secho
+from click import option
 from click import version_option
 
 from buildlackey import __version__ as version
@@ -27,36 +19,16 @@ from buildlackey.commands.ProductionPush import ProductionPush
 from buildlackey.commands.RunMypy import RunMypy
 from buildlackey.commands.RunTests import RunTests
 
-# noinspection SpellCheckingInspection
-BUILD_WHEEL:   str = 'python -m build --sdist --wheel'
-
-PROJECTS_BASE: str = 'PROJECTS_BASE'
-PROJECT:       str = 'PROJECT'
 
 RESOURCES_PACKAGE_NAME:       str = 'buildlackey.resources'
 JSON_LOGGING_CONFIG_FILENAME: str = "loggingConfiguration.json"
 
-STATUS_NO_SUCH_PATH:                 int = 23
-STATUS_UNIT_TEST_FAILED:             int = 77
-STATUS_MISSING_ENVIRONMENT_VARIABLE: int = 42
+"""
+Put in type ignore because of strange error on that appeared on 8.1.4
 
-MESSAGE_MISSING_ENVIRONMENT_VARIABLE: str = 'Missing an environment variable'
-WARNING_OPTION_HELP:                  str = 'Use this option to control Python warnings'
-
-
-def changeToProjectRoot(projectsBase: str, project: str):
-
-    fullPath: str = f'{projectsBase}{osSep}{project}'
-    chdir(fullPath)
-
-
-def doCommandStart(projects_base: str, project: str):
-    setUpLogging()
-    clear()
-    secho(f'{projects_base=}', color=True, reverse=True)
-    secho(f'{project=}', color=True, reverse=True)
-    secho('')
-    changeToProjectRoot(projectsBase=projects_base, project=project)
+buildlackey/Commands.py:80: error: Argument 1 has incompatible type "Callable[[], Any]"; expected <nothing>  [arg-type]
+    @command
+"""
 
 
 def setUpLogging():
@@ -74,10 +46,10 @@ def setUpLogging():
     logging.logThreads = False
 
 
-@command()
+@command
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @option('--input-file', '-i', required=False,   help='Use input file to list the unit tests to execute')
-@option('--warning',    '-w', required=False,   help=WARNING_OPTION_HELP)
+@option('--warning',    '-w', required=False,   help='Use this option to control Python warnings')
 def runtests(input_file: str, warning: str):
     """
     \b
@@ -112,7 +84,7 @@ def runtests(input_file: str, warning: str):
     runTests.execute()
 
 
-@command()
+@command
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
 def cleanup():
     """
@@ -128,7 +100,7 @@ def cleanup():
     clean.execute()
 
 
-@command()
+@command
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
 def runmypy():
     """
@@ -142,7 +114,7 @@ def runmypy():
     runMyPy.execute()
 
 
-@command()
+@command
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @option('--input-file', '-i', required=False,   help='Use input file to specify a set of commands to execute')
 def package(input_file: str):
@@ -165,11 +137,9 @@ def package(input_file: str):
     pkg.execute()
 
 
-@command()
+@command
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
-@argument('projects_base', envvar=PROJECTS_BASE)
-@argument('project', envvar=PROJECT)
-def prodpush(projects_base: str, project: str):
+def prodpush():
     """
     \b
     Pushes the deployable to pypi.  The project is specified by the following environment variables
@@ -177,14 +147,12 @@ def prodpush(projects_base: str, project: str):
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
     """
-    doCommandStart(projects_base, project)
-
     productionPush: ProductionPush = ProductionPush()
     productionPush.execute()
 
 
 if __name__ == "__main__":
 
-    runtests(['-w', 'module'])
+    runtests()
     # cleanup(['--help'])
     # deploy(['--help'])
