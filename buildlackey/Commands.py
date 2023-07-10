@@ -74,10 +74,12 @@ def runtests(input_file: str, warning: str):
         PROJECT       -  The name of the project;  It should be a directory name
 
     \b
+    \b
+    However, if one or the other is not defined the command assumes it is executing in a CI
+    environment and thus the current working directory is the project base directory.
+
     By default, buildlackey runs the module named tests.TestAll
-
     """
-
     setUpLogging()
     runTests: RunTests = RunTests(inputFile=input_file, warning=warning)
 
@@ -153,6 +155,6 @@ def prodpush():
 
 if __name__ == "__main__":
 
-    runtests()
+    runtests(['-i', 'tests/unittest.txt'])
     # cleanup(['--help'])
     # deploy(['--help'])

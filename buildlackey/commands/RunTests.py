@@ -25,9 +25,9 @@ class RunTests(Environment):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._inputFile: str            = inputFile
+        self._inputFile: str = inputFile
         if warning is None:
-            self._warning:   PythonWarnings = PythonWarnings.IGNORE
+            self._warning: PythonWarnings = PythonWarnings.IGNORE
         else:
             try:
                 self._warning = PythonWarnings(warning)
@@ -36,7 +36,8 @@ class RunTests(Environment):
 
     def execute(self):
 
-        self._changeToProjectRoot()
+        if self.validProjectsBase is True and self.validProjectDirectory() is True:
+            self._changeToProjectRoot()
 
         if self._inputFile is None:
             defaultCmd: str = f'{PYTHON_CLI} -W{self._warning.value} -m tests.TestAll'

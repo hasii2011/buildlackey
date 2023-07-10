@@ -10,7 +10,6 @@ from os import sep as osSep
 
 from subprocess import run as subProcessRun
 
-from click import ClickException
 from click import clear
 from click import secho
 
@@ -32,11 +31,11 @@ class Environment:
         try:
             self._projectsBase = osEnvironment[Environment.ENV_PROJECTS_BASE]
         except KeyError:
-            raise ClickException('Project Base not set')
+            self.ebLogger.info(f'Project Base not set')
         try:
             self._projectDirectory = osEnvironment[Environment.ENV_PROJECT]
         except KeyError:
-            raise ClickException(f'Project Directory not set')
+            self.ebLogger.info(f'Project Directory not set')
 
         clear()
         secho(f'projects_base={self._projectsBase}', color=True, reverse=True)

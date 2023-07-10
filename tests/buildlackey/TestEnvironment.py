@@ -31,7 +31,10 @@ class TestEnvironmentBase(UnitTestBase):
         except KeyError:
             pass    # May or may not exist;  don't care
 
-        self.assertRaises(ClickException, lambda: self._noProjectBase())
+        # noinspection PyUnusedLocal
+        eb: Environment = Environment()
+
+        self.assertEqual(eb.projectsBase, '', 'Should be empty')
 
     def testNoProjectSet(self):
         osEnviron[Environment.ENV_PROJECTS_BASE] = str(self._tmpProjectsBase)   # Set the base
@@ -39,12 +42,9 @@ class TestEnvironmentBase(UnitTestBase):
             del osEnviron[Environment.ENV_PROJECT]
         except KeyError:
             pass    # May or may not exist;  don't care
-
-        self.assertRaises(ClickException, lambda: self._noProjectBase())
-
-    def _noProjectBase(self):
         # noinspection PyUnusedLocal
         eb: Environment = Environment()
+        self.assertEquals(eb.projectDirectory, '', 'Should be empty')
 
 
 def suite() -> TestSuite:
