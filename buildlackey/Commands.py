@@ -104,15 +104,18 @@ def cleanup():
 
 @command
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
-def runmypy():
+@option('--package-name', '-p', required=False, help='Use this option when the package name does not match the project name')
+def runmypy(package_name: str):
     """
     \b
     Runs the mypy checks for the project specified by the following environment variables
     \b
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
+
+    PROJECT is overridden if the developer specifies a package name
     """
-    runMyPy: RunMypy = RunMypy()
+    runMyPy: RunMypy = RunMypy(packageName=package_name)
     runMyPy.execute()
 
 

@@ -1,5 +1,5 @@
 #
-# meant to be sourced in 
+# meant to be sourced in
 #
 packageMe() {
 clear
