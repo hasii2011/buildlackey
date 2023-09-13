@@ -4,7 +4,7 @@
 
 ## Rationale
 
-These utilities are meant to help me with my repositories and their maintenance.
+These utilities are meant to help me with my python packages and their maintenance.
 
 ## Dependencies
 
@@ -43,21 +43,112 @@ source pyenv-3.10.6/bin/activate
 
 ## Python Console Scripts
 
-buildlackey means to handle this problem by providing a set of Python command line scripts to automate updating the first three of the above dependency specification locations
+The Python command line scripts in buildlackey automate the maintenance process by providing the following capabilities
 
-* runtests -- queries repositories for their latest release version
-* runmypy -- creates a dependency specification for a project 
-* cleanup -- updates the supported dependency locations using the generated specification
-* deploy -- 
-* prodpush --
+* runtests -- Runs the project's unit tests
+* runmypy  -- Run the [mypy](https://www.mypy-lang.org) static type checker 
+* package  --  Creates a pypi package using [build](https://pypi.org/project/build/) and setup.py 
+* cleanup  -- Deletes the artifacts created by `package`
+* prodpush -- Pushes the built package to [pypi](https://pypi.org)
 
 ## Usage
 
 * runtests
+```text
+Usage: runtests [OPTIONS]
+
+  Runs the unit tests for the project specified by the environment variables listed below;
+  
+  Use the -i/--input-file option to list a set of module names to execute as your  unit tests
+
+  Legal values for -w/--warning are:
+      default
+      error
+      always
+      module
+      once
+      ignore
+  
+  Environment Variables
+
+      PROJECTS_BASE -  The local directory where the python projects are based
+      PROJECT             -  The name of the project;  It should be a directory name
+
+  
+  However, if one or the other is not defined the command assumes it is executing in a CI environment and thus the current working directory is the project base directory.
+
+  By default, buildlackey runs the module named tests.TestAll
+
+Options:
+  --version                        Show the version and exit.
+  -i, --input-file TEXT  Use input file to list the unit tests to execute
+  -w, --warning TEXT         Use this option to control Python warnings
+  --help                                Show this message and exit.
+
+```
 * runmypy
+```text
+Usage: runmypy [OPTIONS]
+
+  Runs the mypy checks for the project specified by the following environment variables
+  
+      PROJECTS_BASE -  The local directory where the python projects are based
+      PROJECT              -  The name of the project;  It should be a directory name
+
+  PROJECT is overridden if the developer specifies a package name
+
+Options:
+  --version                Show the version and exit.
+  -p, --package-name TEXT  Use this option when the package name does not match the project name 
+  --help                   Show this message and exit.
+```
 * cleanup
-* deploy
+
+```text
+Usage: cleanup [OPTIONS]
+
+  Clean the build artifacts for the project specified by the following environment variables
+  
+      PROJECTS_BASE -  The local directory where the python projects are based
+      PROJECT              -  The name of the project;  It should be a directory name
+
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
+
+```
+
+* package
+```text
+Usage: package [OPTIONS]
+
+  Creates the deployable for the project specified by the environment variables listed below
+  
+  Use the -i/--input-file option to specify a set of custom commands to execute to build
+  your deployable
+
+  Environment Variables
+  PROJECTS_BASE -  The local directory where the  python projects are based   
+  PROJECT              -  The name of the project;  It should be a directory name
+
+Options:
+  --version              Show the version and exit.
+  -i, --input-file TEXT  Use input file to specify a set of commands to execute
+  --help                 Show this message and exit.
+```
 * prodpush
+```text
+Usage: prodpush [OPTIONS]
+
+  Pushes the deployable to pypi.  The project is specified by the following environment variables
+  
+      PROJECTS_BASE -  The local directory where the python projects are based
+      PROJECT             -  The name of the project;  It should be a directory name
+
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
+```
 
 ___
 
@@ -76,16 +167,11 @@ I am concerned about GitHub's Copilot project
 
 
 
-I urge you to read about the
-[Give up GitHub](https://GiveUpGitHub.org) campaign from [the Software Freedom Conservancy](https://sfconservancy.org).
+I urge you to read about the[Give up GitHub](https://GiveUpGitHub.org) campaign from [the Software Freedom Conservancy](https://sfconservancy.org).
 
 While I do not advocate for all the issues listed there I do not like that a company like Microsoft may profit from open source projects.
 
 I continue to use GitHub because it offers the services I need for free.  But, I continue to monitor their terms of service.
 
 Any use of this project's code by GitHub Copilot, past or present, is done without my permission.  I do not consent to GitHub's use of this project's code in Copilot.
-
-A repository owner may opt out of Copilot by changing Settings --> GitHub Copilot.
-
-I have done so.
 
