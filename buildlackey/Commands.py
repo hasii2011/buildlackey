@@ -88,16 +88,19 @@ def runtests(input_file: str, warning: str):
 
 @command
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
-def cleanup():
+@option('--package-name', '-p', required=False, help='Use this option when the package name does not match the project name')
+def cleanup(package_name: str):
     """
     \b
     Clean the build artifacts for the project specified by the following environment variables
     \b
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
+
+    PROJECT is overridden if the developer specifies a package name
     """
     setUpLogging()
-    clean: Cleanup = Cleanup()
+    clean: Cleanup = Cleanup(packageName=package_name)
 
     clean.execute()
 

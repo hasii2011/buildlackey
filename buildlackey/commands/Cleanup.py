@@ -14,9 +14,10 @@ DELETE_EGGS:             str = 'rm -rfv .eggs'
 
 class Cleanup(Environment):
     
-    def __init__(self):
+    def __init__(self, packageName: str):
         super().__init__()
-        self.logger: Logger = getLogger(__name__)
+        self.logger:       Logger = getLogger(__name__)
+        self._packageName: str    = packageName
 
     def execute(self):
 
@@ -38,7 +39,12 @@ class Cleanup(Environment):
         status = self._runCommand(DELETE_EGGS)
         secho(f'{status=}')
 
-        PROJECT_EGG_INFO: str = f'rm -rfv {self._projectDirectory}.egg-info'
+        if self._packageName is None:
+            packageName: str = self._projectDirectory
+        else:
+            packageName = self._packageName
+
+        PROJECT_EGG_INFO: str = f'rm -rfv {packageName}.egg-info'
         secho(f'{PROJECT_EGG_INFO}')
         status = self._runCommand(PROJECT_EGG_INFO)
         secho(f'{status=}')

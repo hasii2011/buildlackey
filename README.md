@@ -1,6 +1,6 @@
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/hasii2011/buildlackey/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/hasii2011/buildlackey/tree/master)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-
+[![PyPI version](https://badge.fury.io/py/buildlackey.svg)](https://badge.fury.io/py/buildlackey)
 
 ## Rationale
 
