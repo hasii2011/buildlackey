@@ -160,8 +160,9 @@ def prodpush():
 
 
 if __name__ == "__main__":
-
-    runmypy(['-p', 'codeallyadvanced'])
+    runtests([])
+    # noinspection SpellCheckingInspection
+    # runmypy(['-p', 'codeallyadvanced'])
     # runtests(['-i', 'tests/unittest.txt'])
     # cleanup(['--help'])
     # deploy(['--help'])
