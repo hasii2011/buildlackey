@@ -64,7 +64,7 @@ class TestAll:
         """
         Read the unit test logging configuration file
         """
-        from hasiihelper.UnitTestBase import UnitTestBase
+        from codeallybasic.UnitTestBase import UnitTestBase
 
         UnitTestBase.setUpLogging()
 

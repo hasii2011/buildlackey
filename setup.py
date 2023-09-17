@@ -1,3 +1,4 @@
+
 import pathlib
 from setuptools import setup
 
@@ -32,7 +33,8 @@ setup(
     },
 
     install_requires=[
-        'click~=8.1.3',
+        'codeallybasic==0.5.2',
+        'click~=8.1.7',
     ],
     entry_points={
         "console_scripts": [

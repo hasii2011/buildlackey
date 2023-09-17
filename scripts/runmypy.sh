@@ -9,5 +9,6 @@ mypy --config-file .mypi.ini --pretty --no-color-output --show-error-codes --che
 status=$?
 
 echo "Exit with status: ${status}"
+cd -
 exit ${status}
 

@@ -2,7 +2,7 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from hasiihelper.UnitTestBase import UnitTestBase
+from codeallybasic.UnitTestBase import UnitTestBase
 
 # import the class you want to test here
 # from org.pyut.template import template
@@ -33,8 +33,7 @@ def suite() -> TestSuite:
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
-    # testSuite.addTest(unittest.makeSuite(TestTemplate))
+
     testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestTemplate))
 
     return testSuite

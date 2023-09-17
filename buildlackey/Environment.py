@@ -65,7 +65,7 @@ class Environment:
 
     def _runCommand(self,  command: str) -> int:
 
-        cp: CompletedProcess = subProcessRun([command], shell=True, capture_output=False, text=True, check=False)
+        cp: CompletedProcess = subProcessRun([command], shell=True, capture_output=True, text=True, check=False)
 
         return cp.returncode
 
