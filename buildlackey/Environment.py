@@ -68,7 +68,7 @@ class Environment:
         cp: CompletedProcess = subProcessRun([command], shell=True, capture_output=True, text=True, check=False)
 
         secho(f'{cp.stdout}')
-        if cp.returncode != 0:
+        if cp.returncode != 0 or len(cp.stderr) != 0:
             secho(f'{cp.stderr}', bold=True)
         return cp.returncode
 
