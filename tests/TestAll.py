@@ -28,7 +28,7 @@ class TestAll:
     NOT_TESTS: List[str] = ['TestAll', 'TestTemplate', 'buildlackey/commands/TestRunTests']
 
     VERBOSITY_QUIET:   int = 0  # Print the total numbers of tests executed and the global result
-    VERBOSITY_DEFAULT: int = 1  # VERBOSITY_QUIET plus a dot for every successful test or an F for every failure
+    VERBOSITY_DEFAULT: int = 1  # QUIET plus a dot for every successful test or an F for every failure
     VERBOSITY_VERBOSE: int = 2  # Print help string of every test and the result
     VERBOSITY_LOUD:    int = 3  # ??
 
