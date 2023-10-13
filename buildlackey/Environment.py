@@ -10,7 +10,6 @@ from os import sep as osSep
 
 from subprocess import run as subProcessRun
 
-from click import clear
 from click import secho
 
 
@@ -37,7 +36,7 @@ class Environment:
         except KeyError:
             self.ebLogger.info(f'Project Directory not set')
 
-        clear()
+        secho('')
         secho(f'projects_base={self._projectsBase}', color=True, reverse=True)
         secho(f'project={self._projectDirectory}', color=True, reverse=True)
         secho('')
