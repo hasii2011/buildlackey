@@ -2,6 +2,9 @@
 from logging import Logger
 from logging import getLogger
 
+from os import sep as osSep
+from os import environ as osEnvironment
+
 from warnings import filterwarnings
 
 from enum import Enum
@@ -28,8 +31,9 @@ class ExecutionStatus(Enum):
 class UnitTests(Environment):
 
     HTML_REPORT_DIRECTORY_NAME: str = 'html_unit_test_reports'
+    ENV_VAR_PYTHON_PATH:        str = 'PYTHONPATH'
 
-    def __init__(self, warning: PythonWarnings, verbosity: UnitTestVerbosity, pattern: str, html: bool, reportName: str):
+    def __init__(self, warning: PythonWarnings, verbosity: UnitTestVerbosity, pattern: str, html: bool, reportName: str, sourceSubDirectory: str):
         """
 
         Args:
@@ -38,6 +42,7 @@ class UnitTests(Environment):
             pattern:
             html:
             reportName:
+            sourceSubDirectory
         """
 
         super().__init__()
@@ -46,10 +51,11 @@ class UnitTests(Environment):
         self._pattern:         str  = pattern
         self._html:            bool = html
 
-        self._executionStatus: ExecutionStatus   = ExecutionStatus.ALL_TESTS_PASSED
-        self._verbosity:       UnitTestVerbosity = verbosity
-        self._reportName:      str               = reportName
-        # self._warning:         PythonWarnings    = warning
+        self._executionStatus:    ExecutionStatus   = ExecutionStatus.ALL_TESTS_PASSED
+        self._verbosity:          UnitTestVerbosity = verbosity
+        self._reportName:         str               = reportName
+        self._sourceSubDirectory: str               = sourceSubDirectory
+
         secho(f'Python Warnings: {warning.value}')
         filterwarnings(warning.value)       # type: ignore
 
@@ -58,9 +64,20 @@ class UnitTests(Environment):
         if self.validProjectsBase is True and self.validProjectDirectory() is True:
             self._changeToProjectRoot()
 
+        pythonPath:    str = (f'{self._projectsBase}{osSep}'
+                              f'{self._projectDirectory}{osSep}'
+                              f'{self._sourceSubDirectory}{osSep}'
+                              f'{self._projectDirectory}'           # I am assuming that the project name is the same as the top level package
+                              )
+
+        osEnvironment[UnitTests.ENV_VAR_PYTHON_PATH] = f''
+        secho('------------------------------------------------------------------')
+        secho(f'{pythonPath=}')
+        secho('------------------------------------------------------------------')
+
         secho(f'Test Pattern: {self._pattern}')
         testLoader: TestLoader = TestLoader()
-        testSuite:  TestSuite  = testLoader.discover(start_dir='.', pattern=self._pattern, top_level_dir='.')
+        testSuite:  TestSuite  = testLoader.discover(start_dir='.', pattern=self._pattern, top_level_dir='')
 
         if self._html is True:
             self._runHtmlTestRunner(testSuite=testSuite)

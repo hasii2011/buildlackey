@@ -46,7 +46,7 @@ class TestEnvironmentBase(UnitTestBase):
             pass    # May or may not exist;  don't care
         # noinspection PyUnusedLocal
         eb: Environment = Environment()
-        self.assertEquals(eb.projectDirectory, '', 'Should be empty')
+        self.assertEqual(eb.projectDirectory, '', 'Should be empty')
 
 
 def suite() -> TestSuite:
