@@ -3,7 +3,9 @@ from logging import Logger
 from logging import getLogger
 
 from os import sep as osSep
-from os import environ as osEnvironment
+from os import path as osPath
+
+from sys import path as sysPath
 
 from warnings import filterwarnings
 
@@ -31,7 +33,6 @@ class ExecutionStatus(Enum):
 class UnitTests(Environment):
 
     HTML_REPORT_DIRECTORY_NAME: str = 'html_unit_test_reports'
-    ENV_VAR_PYTHON_PATH:        str = 'PYTHONPATH'
 
     def __init__(self, warning: PythonWarnings, verbosity: UnitTestVerbosity, pattern: str, html: bool, reportName: str, sourceSubDirectory: str):
         """
@@ -66,13 +67,12 @@ class UnitTests(Environment):
 
         pythonPath:    str = (f'{self._projectsBase}{osSep}'
                               f'{self._projectDirectory}{osSep}'
-                              f'{self._sourceSubDirectory}{osSep}'
-                              f'{self._projectDirectory}'           # I am assuming that the project name is the same as the top level package
+                              f'{self._sourceSubDirectory}'
                               )
+        sysPath.append(osPath.abspath(f'{pythonPath}'))
 
-        osEnvironment[UnitTests.ENV_VAR_PYTHON_PATH] = f''
         secho('------------------------------------------------------------------')
-        secho(f'{pythonPath=}')
+        secho(f'Added: {pythonPath=}', reverse=True)
         secho('------------------------------------------------------------------')
 
         secho(f'Test Pattern: {self._pattern}')
