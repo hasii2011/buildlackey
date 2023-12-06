@@ -2,6 +2,8 @@
 from logging import Logger
 from logging import getLogger
 
+from os import sep as osSep
+
 from click import secho
 
 from buildlackey.Environment import Environment
@@ -13,7 +15,7 @@ DELETE_EGGS:             str = 'rm -rfv .eggs'
 
 
 class Cleanup(Environment):
-    
+
     def __init__(self, packageName: str):
         super().__init__()
         self.logger:       Logger = getLogger(__name__)
@@ -43,8 +45,17 @@ class Cleanup(Environment):
             packageName: str = self._projectDirectory
         else:
             packageName = self._packageName
-
+        #
+        # Works for setup.py projects
+        #
         PROJECT_EGG_INFO: str = f'rm -rfv {packageName}.egg-info'
         secho(f'{PROJECT_EGG_INFO}')
         status = self._runCommand(PROJECT_EGG_INFO)
+        secho(f'{status=}')
+        #
+        # works for pyproject.toml projects; (https://packaging.python.org/en/latest/specifications/pyproject-toml/)
+        #
+        SRC_EGG_INFO: str = f'rm -rfv src{osSep}{packageName}.egg-info'
+        secho(f'{SRC_EGG_INFO}')
+        status = self._runCommand(SRC_EGG_INFO)
         secho(f'{status=}')
