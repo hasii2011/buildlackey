@@ -65,10 +65,14 @@ class UnitTests(Environment):
         if self.validProjectsBase is True and self.validProjectDirectory() is True:
             self._changeToProjectRoot()
 
-        pythonPath:    str = (f'{self._projectsBase}{osSep}'
-                              f'{self._projectDirectory}{osSep}'
-                              f'{self._sourceSubDirectory}'
-                              )
+            pythonPath: str = (f'{self._projectsBase}{osSep}'
+                               f'{self._projectDirectory}{osSep}'
+                               f'{self._sourceSubDirectory}'
+                               )
+        else:
+            secho('Set appropriate syspath for CI environment')
+            pythonPath = f'{self._sourceSubDirectory}'
+
         sysPath.append(osPath.abspath(f'{pythonPath}'))
 
         secho('------------------------------------------------------------------')
