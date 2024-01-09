@@ -33,9 +33,7 @@ setup(
     },
 
     install_requires=[
-        'codeallybasic==0.5.2',
         'click~=8.1.7',
-        'html-testRunner==1.2.1',
     ],
     entry_points={
         "console_scripts": [
