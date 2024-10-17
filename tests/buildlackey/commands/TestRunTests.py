@@ -8,7 +8,7 @@ from buildlackey import __version__ as version
 
 def testRunTestVersion():
     runner: CliRunner = CliRunner()
-    result: Result = runner.invoke(Commands.runtests, ['--version'])
+    result: Result = runner.invoke(Commands.unittests, ['--version'])
 
     assert result.exit_code == 0
     # noinspection SpellCheckingInspection

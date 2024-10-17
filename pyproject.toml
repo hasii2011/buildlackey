@@ -32,8 +32,8 @@ version = {attr = 'buildlackey.__version__'}
 [project.scripts]
 
 unittests = "buildlackey.Commands:unittests"
-runtests = "buildlackey.Commands:runtests"
 cleanup = "buildlackey.Commands:cleanup"
 runmypy = "buildlackey.Commands:runmypy"
 package = "buildlackey.Commands:package"
 prodpush = "buildlackey.Commands:prodpush"
+buildlackey = "buildlackey.Commands:buildlackey"

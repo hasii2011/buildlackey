@@ -10,8 +10,10 @@ from json import load as jsonLoad
 import click
 from click import Option
 from click import UNPROCESSED
+from click import clear
 from click import command
 from click import option
+from click import secho
 from click import version_option
 from click import Context
 
@@ -21,7 +23,6 @@ from buildlackey.PythonWarnings import PythonWarnings
 from buildlackey.commands.Cleanup import Cleanup
 from buildlackey.commands.Package import Package
 from buildlackey.commands.RunMypy import RunMypy
-from buildlackey.commands.RunTests import RunTests
 from buildlackey.commands.UnitTests import UnitTests
 from buildlackey.commands.ProductionPush import ProductionPush
 from buildlackey.commands.UnitTestVerbosity import UnitTestVerbosity
@@ -168,46 +169,6 @@ def runmypy(package_name: str, source: str):
 
 @command(epilog=EPILOG)
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
-@option('--input-file', '-i', required=False,   help='Use input file to list the unit tests to execute')
-@option('--warning',    '-w', required=False,   help='Use this option to control Python warnings')
-def runtests(input_file: str, warning: str):
-    """
-    \b
-    Runs the unit tests for the project specified by the environment variables listed below;
-    \b
-    Use the -i/--input-file option to list a set of module names to execute as your
-    unit tests
-
-    Legal values for -w/--warning are:
-
-    \b
-        default
-        error
-        always
-        module
-        once
-        ignore
-    \b
-    Environment Variables
-
-        PROJECTS_BASE -  The local directory where the python projects are based
-        PROJECT       -  The name of the project;  It should be a directory name
-
-    \b
-    \b
-    However, if one or the other is not defined the command assumes it is executing in a CI
-    environment and thus the current working directory is the project base directory.
-
-    By default, buildlackey runs the module named tests.TestAll
-    """
-    setUpLogging()
-    runTests: RunTests = RunTests(inputFile=input_file, warning=warning)
-
-    runTests.execute()
-
-
-@command(epilog=EPILOG)
-@version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @option('--package-name', '-p', required=False, help='Use this option when the package name does not match the project name')
 def cleanup(package_name: str):
     """
@@ -260,6 +221,18 @@ def prodpush():
     """
     productionPush: ProductionPush = ProductionPush()
     productionPush.execute()
+
+
+@command()
+@version_option(version=f'{version}', message='%(prog)s version %(version)s')
+def buildlackey():
+    clear()
+    secho('Commands are:')
+    secho('\tunittests')
+    secho('\tcleanup:')
+    secho('\trunmypy')
+    secho('\tpackage')
+    secho('\tprodpush')
 
 
 if __name__ == "__main__":
