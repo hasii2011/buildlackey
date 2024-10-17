@@ -4,7 +4,7 @@ source ./common.sh
 
 changeToProjectRoot
 
-mypy --config-file .mypi.ini --pretty --no-color-output --show-error-codes --check-untyped-defs   buildlackey tests
+mypy --config-file .mypi.ini --pretty --no-color-output --show-error-codes --check-untyped-defs   src/buildlackey tests
 
 status=$?
 

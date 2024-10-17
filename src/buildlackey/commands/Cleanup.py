@@ -46,7 +46,7 @@ class Cleanup(Environment):
         else:
             packageName = self._packageName
         #
-        # Works for setup.py projects
+        # Works for setup.py.OLD projects
         #
         PROJECT_EGG_INFO: str = f'rm -rfv {packageName}.egg-info'
         secho(f'{PROJECT_EGG_INFO}')
