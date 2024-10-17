@@ -24,4 +24,5 @@ jobs:
       - run:
             name: run tests
             command: | 
-              scripts/runtests.sh
+              pip install buildlackey
+              unittests
