@@ -170,7 +170,8 @@ def runmypy(package_name: str, source: str):
 @command(epilog=EPILOG)
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
 @option('--package-name', '-p', required=False, help='Use this option when the package name does not match the project name')
-def cleanup(package_name: str):
+@option('--application-name', '-a', required=False, help='Use this option when the generated application name does not match the project name')
+def cleanup(package_name: str, application_name: str):
     """
     \b
     Clean the build artifacts for the project specified by the following environment variables
@@ -181,7 +182,7 @@ def cleanup(package_name: str):
     PROJECT is overridden if the developer specifies a package name
     """
     setUpLogging()
-    clean: Cleanup = Cleanup(packageName=package_name)
+    clean: Cleanup = Cleanup(packageName=package_name, applicationName=application_name)
 
     clean.execute()
 
@@ -239,8 +240,7 @@ if __name__ == "__main__":
     # unittests(['-w', 'ignore'])
     # runtests(['-w', 'default'])
     # noinspection SpellCheckingInspection
-    runmypy([])
-    # runtests(['-i', 'tests/unittest.txt'])
-    # cleanup(['--help'])
+    # runmypy([])
+    cleanup(['--application-name', 'Pyut'])
     # deploy(['--help'])
     # unittests(['-s', '.'])

@@ -16,10 +16,13 @@ DELETE_EGGS:             str = 'rm -rfv .eggs'
 
 class Cleanup(Environment):
 
-    def __init__(self, packageName: str):
+    def __init__(self, packageName: str, applicationName: str):
+
         super().__init__()
-        self.logger:       Logger = getLogger(__name__)
-        self._packageName: str    = packageName
+
+        self.logger:           Logger = getLogger(__name__)
+        self._packageName:     str    = packageName
+        self._applicationName: str    = applicationName
 
     def execute(self):
 
@@ -48,7 +51,11 @@ class Cleanup(Environment):
         #
         # Works for setup.py.OLD projects
         #
-        PROJECT_EGG_INFO: str = f'rm -rfv {packageName}.egg-info'
+        if self._applicationName is not None:
+            PROJECT_EGG_INFO: str = f'rm -rfv {self._applicationName}.egg-info'
+        else:
+            PROJECT_EGG_INFO = f'rm -rfv {packageName}.egg-info'
+
         secho(f'{PROJECT_EGG_INFO}')
         status = self._runCommand(PROJECT_EGG_INFO)
         secho(f'{status=}')
