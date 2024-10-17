@@ -266,8 +266,8 @@ if __name__ == "__main__":
     # unittests(['-w', 'ignore'])
     # runtests(['-w', 'default'])
     # noinspection SpellCheckingInspection
-    # runmypy(['-p', 'codeallyadvanced'])
+    runmypy([])
     # runtests(['-i', 'tests/unittest.txt'])
     # cleanup(['--help'])
     # deploy(['--help'])
-    unittests(['-s', '.'])
+    # unittests(['-s', '.'])
