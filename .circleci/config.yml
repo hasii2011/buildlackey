@@ -1,6 +1,7 @@
 
 version: '2.1'
-
+# unittests is installed command from buildlackey
+# Updated to ignore missing environment variables
 orbs:
   python: circleci/python@2.1.1
 
@@ -21,18 +22,6 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-      - run:
-          name: Cache Stuff
-          command: |
-            virtualenv .venv;
-            echo "source .venv/bin/activate" >> $BASH_ENV;
-            echo "Where is the cache --------------------------------"
-            ls -al ~/.cache/pip
-      - save_cache:
-          key: pydeps-v01__{{ checksum "requirements.txt" }}
-          paths:
-            - ".venv"
-            - "~/.cache/pip"    # (pip cache dir)
       - run:
             name: run tests
             command: | 
