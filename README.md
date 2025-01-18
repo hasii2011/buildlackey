@@ -22,7 +22,7 @@ The above commands depend on the following environment variables.
 
 ```bash
 PROJECTS_BASE -  The local directory where the python projects are based
-PROJECT              -  The name of the project;  It should be a directory name
+PROJECT       -  The name of the project;  It should be a directory name
 ```
 
  An example, of a PROJECTS_BASE is:
@@ -45,47 +45,68 @@ source pyenv-3.10.6/bin/activate
 
 The Python command line scripts in buildlackey automate the maintenance process by providing the following capabilities
 
-* runtests -- Runs the project's unit tests
-* runmypy  -- Run the [mypy](https://www.mypy-lang.org) static type checker 
-* package  --  Creates a pypi package using [build](https://pypi.org/project/build/) and setup.py 
-* cleanup  -- Deletes the artifacts created by `package`
-* prodpush -- Pushes the built package to [pypi](https://pypi.org)
+* unittests -- Runs the project's unit tests
+* runmypy   -- Run the [mypy](https://www.mypy-lang.org) static type checker 
+* package   --  Creates a pypi package using [build](https://pypi.org/project/build/) and setup.py 
+* cleanup   -- Deletes the artifacts created by `package`
+* prodpush  -- Pushes the built package to [pypi](https://pypi.org)
 
 ## Usage
 
-* runtests
+* unittests
 ```text
-Usage: runtests [OPTIONS]
+Usage: unittests [OPTIONS]
 
-  Runs the unit tests for the project specified by the environment variables listed below;
+  Runs the unit tests for the project specified by the environment variables listed below.
+  This command differs from the 'runtests' command in that it uses the unit test TestLoader
+  discovery mechanism
+
+  Environment Variables
+
+      PROJECTS_BASE -  The local directory where the python projects are based
+      PROJECT       -  The name of the project;  It should be a directory name
+
+  However, if one or the other is not defined the command assumes it is executing in a CI
+  environment and thus the current working directory is the project base directory.
   
-  Use the -i/--input-file option to list a set of module names to execute as your  unit tests
-
   Legal values for -w/--warning are:
+
       default
       error
       always
       module
       once
-      ignore
+      ignore      This is the default
   
-  Environment Variables
-
-      PROJECTS_BASE -  The local directory where the python projects are based
-      PROJECT             -  The name of the project;  It should be a directory name
-
+  The default pattern is 'Test*.py'
   
-  However, if one or the other is not defined the command assumes it is executing in a CI environment and thus the current working directory is the project base directory.
+  Legal values for -v/--verbosity are:
+      quiet
+      default     This is the default 🧐
+      verbose
+      loud
 
-  By default, buildlackey runs the module named tests.TestAll
+  The -h/--html flag runs the HTMLTestRunner and places the reports in the
+  'html_unit_test_reports' directory
+
+  The -r/--report-name options names the HTML Test report
+
+  The -s/--source option specifies the project subdirectory where the Python
+  source code resides. The source default value is 'src' 
 
 Options:
-  --version                        Show the version and exit.
-  -i, --input-file TEXT  Use input file to list the unit tests to execute
-  -w, --warning TEXT         Use this option to control Python warnings
-  --help                                Show this message and exit.
+  --version               Show the version and exit.
+  -w, --warning TEXT      Use this option to control Python warnings
+  -v, --verbosity TEXT    How verbose to be
+  -p, --pattern TEXT      Test files that match pattern will be loaded
+  -h, --html              Run the HTML rest runner
+  -r, --report-name TEXT  The HTML test report name
+  -s, --source TEXT       The project subdirectory where the source code
+                          resides
+  --help                  Show this message and exit.
 
 ```
+
 * runmypy
 ```text
 Usage: runmypy [OPTIONS]
@@ -93,13 +114,19 @@ Usage: runmypy [OPTIONS]
   Runs the mypy checks for the project specified by the following environment variables
   
       PROJECTS_BASE -  The local directory where the python projects are based
-      PROJECT              -  The name of the project;  It should be a directory name
+      PROJECT       -  The name of the project;  It should be a directory name
 
   PROJECT is overridden if the developer specifies a package name
 
+  The -s/--source option specifies the project subdirectory where the Python
+  source code resides. The source default value is 'src'
+
 Options:
   --version                Show the version and exit.
-  -p, --package-name TEXT  Use this option when the package name does not match the project name 
+  -p, --package-name TEXT  Use this option when the package name does not
+                           match the project name
+  -s, --source TEXT        The project subdirectory where the source code
+                           resides
   --help                   Show this message and exit.
 ```
 * cleanup
@@ -110,11 +137,17 @@ Usage: cleanup [OPTIONS]
   Clean the build artifacts for the project specified by the following environment variables
   
       PROJECTS_BASE -  The local directory where the python projects are based
-      PROJECT              -  The name of the project;  It should be a directory name
+      PROJECT       -  The name of the project;  It should be a directory name
+
+  PROJECT is overridden if the developer specifies a package name
 
 Options:
-  --version  Show the version and exit.
-  --help     Show this message and exit.
+  --version                    Show the version and exit.
+  -p, --package-name TEXT      Use this option when the package name does not
+                               match the project name
+  -a, --application-name TEXT  Use this option when the generated application
+                               name does not match the project name
+  --help                       Show this message and exit.
 
 ```
 
@@ -127,14 +160,16 @@ Usage: package [OPTIONS]
   Use the -i/--input-file option to specify a set of custom commands to execute to build
   your deployable
 
-  Environment Variables
-  PROJECTS_BASE -  The local directory where the  python projects are based   
-  PROJECT              -  The name of the project;  It should be a directory name
+  Environment Variables       PROJECTS_BASE -  The local directory where the
+  python projects are based   PROJECT       -  The name of the project;  It
+  should be a directory name
 
 Options:
   --version              Show the version and exit.
-  -i, --input-file TEXT  Use input file to specify a set of commands to execute
+  -i, --input-file TEXT  Use input file to specify a set of commands to
+                         execute
   --help                 Show this message and exit.
+
 ```
 * prodpush
 ```text
@@ -143,16 +178,17 @@ Usage: prodpush [OPTIONS]
   Pushes the deployable to pypi.  The project is specified by the following environment variables
   
       PROJECTS_BASE -  The local directory where the python projects are based
-      PROJECT             -  The name of the project;  It should be a directory name
+      PROJECT       -  The name of the project;  It should be a directory name
 
 Options:
   --version  Show the version and exit.
   --help     Show this message and exit.
+
 ```
 
 ___
 
-Written by <a href="mailto:email@humberto.a.sanchez.ii@gmail.com?subject=Hello Humberto">Humberto A. Sanchez II</a>  (C) 2024
+Written by <a href="mailto:email@humberto.a.sanchez.ii@gmail.com?subject=Hello Humberto">Humberto A. Sanchez II</a>  (C) 2025
 
 ---
 
