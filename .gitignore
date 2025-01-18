@@ -6,7 +6,6 @@ __pycache__/
 build/
 dist/
 buildlackey.egg-info
-/pyenv-3.10.10/
-/pyenv-3.11.0/
+/pyenv-3.12.8/
 .envrc
 .python-version

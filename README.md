@@ -21,8 +21,8 @@ These utilities work best using the following opinionated dependencies
 The above commands depend on the following environment variables.
 
 ```bash
-PROJECTS_BASE             -  The local directory where the python projects are based
-PROJECT                          -  The name of the project;  It should be a directory name
+PROJECTS_BASE -  The local directory where the python projects are based
+PROJECT              -  The name of the project;  It should be a directory name
 ```
 
  An example, of a PROJECTS_BASE is:

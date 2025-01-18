@@ -12,7 +12,7 @@ def testRunTestVersion():
 
     assert result.exit_code == 0
     # noinspection SpellCheckingInspection
-    assert result.output == f'runtests version {version}\n'
+    assert result.output == f'unittests version {version}\n'
 
 
 if __name__ == '__main__':

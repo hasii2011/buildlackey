@@ -3,7 +3,8 @@ import logging
 import logging.config
 
 from importlib.resources import files
-from importlib.abc import Traversable
+
+from importlib.resources.abc import Traversable
 
 from json import load as jsonLoad
 
@@ -241,6 +242,7 @@ if __name__ == "__main__":
     # runtests(['-w', 'default'])
     # noinspection SpellCheckingInspection
     # runmypy([])
-    cleanup(['--application-name', 'Pyut'])
+    # cleanup(['--application-name', 'Pyut'])
     # deploy(['--help'])
     # unittests(['-s', '.'])
+    unittests(['--version'])
