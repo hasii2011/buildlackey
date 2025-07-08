@@ -5,7 +5,7 @@ __pycache__/
 /html/
 build/
 dist/
-buildlackey.egg-info
+src/buildlackey.egg-info
 /pyenv-3.12.8/
 .envrc
 .python-version

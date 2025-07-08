@@ -12,6 +12,6 @@ cd ..
 
 alias cleanup='clear;   cd scripts;  ./cleanup.sh;   cd -'
 alias runmypy='clear;   cd scripts;  ./runmypy.sh;   cd -'
-alias runtests='clear;  cd scripts;  ./runtests.sh;  cd -'
+alias unittests='clear;  cd scripts;  ./unittests.sh;  cd -'
 
 alias package='clear; packageMe deploy'

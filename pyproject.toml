@@ -13,8 +13,8 @@ maintainers = [{name = 'Humberto A. Sanchez II', email = 'Humbert.A.Sanchez.II@g
 keywords = ['developer', 'python',]
 
 dependencies = [
-    'click~=8.1.7',
-    'html-testRunner==1.2.1',
+    'click>=8.1.8',
+    'html-testRunner>=1.2.1',
 ]
 
 [project.optional-dependencies]
