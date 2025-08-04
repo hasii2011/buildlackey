@@ -148,9 +148,10 @@ def unittests(warning: PythonWarnings, verbosity: UnitTestVerbosity, pattern: st
 
 @command(epilog=EPILOG)
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
-@option('--package-name', '-p', required=False, help='Use this option when the package name does not match the project name')
-@option('--source',       '-s', default='src',   help='The project subdirectory where the source code resides')
-def runmypy(package_name: str, source: str):
+@option('--package-name', '-p', required=False,               help='Use this option when the package name does not match the project name')
+@option('--delete-cache', '-d', required=False, is_flag=True, help='Delete .mypy_cache prior to running')
+@option('--source',       '-s', default='src',                help='The project subdirectory where the source code resides')
+def runmypy(package_name: str, source: str, delete_cache: bool=False):
     """
     \b
     Runs the mypy checks for the project specified by the following environment variables
@@ -160,17 +161,22 @@ def runmypy(package_name: str, source: str):
 
     PROJECT is overridden if the developer specifies a package name
 
+    The -p/--package-name option to change the package name when it does not much the project name
+
+    The -d/--delete-cache option allows the developer to delete the default mypy cache prior to running
+    the command
+
     The -s/--source option specifies the project subdirectory where the Python source code resides. The source
     default value is 'src'
 
     """
-    runMyPy: RunMypy = RunMypy(packageName=package_name, sourceSubDirectory=source)
+    runMyPy: RunMypy = RunMypy(packageName=package_name, sourceSubDirectory=source, deleteCache=delete_cache)
     runMyPy.execute()
 
 
 @command(epilog=EPILOG)
 @version_option(version=f'{version}', message='%(prog)s version %(version)s')
-@option('--package-name', '-p', required=False, help='Use this option when the package name does not match the project name')
+@option('--package-name',     '-p', required=False, help='Use this option when the package name does not match the project name')
 @option('--application-name', '-a', required=False, help='Use this option when the generated application name does not match the project name')
 def cleanup(package_name: str, application_name: str):
     """
@@ -241,8 +247,8 @@ if __name__ == "__main__":
     # unittests(['-w', 'ignore'])
     # runtests(['-w', 'default'])
     # noinspection SpellCheckingInspection
-    # runmypy([])
+    runmypy([])
     # cleanup(['--application-name', 'Pyut'])
     # deploy(['--help'])
     # unittests(['-s', '.'])
-    unittests(['--version'])
+    # unittests(['--version'])

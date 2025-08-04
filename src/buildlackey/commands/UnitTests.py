@@ -83,6 +83,7 @@ class UnitTests(Environment):
         testLoader: TestLoader = TestLoader()
         testSuite:  TestSuite  = testLoader.discover(start_dir='.', pattern=self._pattern, top_level_dir='')
 
+        # noinspection PySimplifyBooleanCheck
         if self._html is True:
             self._runHtmlTestRunner(testSuite=testSuite)
         else:
